@@ -14,3 +14,17 @@ int	get_next_line(int const fd, char **line)
 {
 
 }
+
+int	main(int ac, char **av)
+{
+  int fd;
+  int ret;
+
+  ret = 0;
+  if (ac > 1)
+    {
+      fd = open(av[2], O_RDONLY);
+      while ((ret = get_next_line(fd, 
+    }
+  return 0;
+}
