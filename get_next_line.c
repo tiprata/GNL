@@ -45,7 +45,7 @@ int	get_next_line(int const fd, char **line)
       stop = ft_strchr(tmp, '\n');
       if (stop > 0)
 	{
-	  while (tmp[stop + 1])
+	  while (tmp[stop])
 	    {
 	      str = ft_strnew(ft_strlen(tmp) - stop - 1);	      
 	      str[i] = tmp[stop];
@@ -59,6 +59,7 @@ int	get_next_line(int const fd, char **line)
 	  str[i] = '\0';
 	  stock = ft_dupnstrcat(stock, tmp, stop - i);
 	  *line = ft_strdup(stock);
+	  ft_bluestr(stock);
 	  return (ret);
 	 
 	}
@@ -83,9 +84,10 @@ int	main(int ac, char **av)
     {
       fd = open(av[1], O_RDONLY);
       while ((ret = get_next_line(fd, &line[i])))
+	{
 	i++;
+	}
     }
   line[i] = NULL;
-  ft_putab(line);
   return (0);
 }
