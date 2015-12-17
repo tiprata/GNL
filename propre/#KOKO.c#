@@ -42,14 +42,13 @@ int	get_next_line(int const fd, char **line)
       stop = ft_strchr(tmp, '\n');
       if (stop >= 0)
 	{
-	  str = ft_strnew(ft_strlen(tmp) - stop);
+	  str = ft_strnew(ft_strlen(tmp) - stop - 1);
 	  stop++;
 	  while (tmp[stop])
 	    {
 	      if (tmp[stop] == '\n')
 		{
-		  ft_pinkchar('X');
-		  count = stop - 1;
+		  count = stop + 1;
 		  stop++;
 		}
 	      else
@@ -60,12 +59,13 @@ int	get_next_line(int const fd, char **line)
 		}
 	    }
 	  str[i] = '\0';
-	  stock = ft_dupnstrcat(stock, tmp, count);//ft_strlen(tmp) - stop);
+	  stock = ft_dupnstrcat(stock, tmp, ft_strlen(tmp) - stop);
 	  *line = ft_strdup(stock);
 	  return (ret);
+	 
 	}
       else 
-	stock = ft_dupstrcat(stock, tmp);
+	  stock = ft_dupstrcat(stock, tmp);
     }
   *line = ft_strdup(stock);
   free(stock);
@@ -88,8 +88,9 @@ int	main(int ac, char **av)
       fd = open(av[1], O_RDONLY);
       while ((ret = get_next_line(fd, &line[i])))
 	{
+	  //	  ft_redstr("CECI EST LE RETOUR DE GNL -=->");
 	  ft_bluestr(line[i]);
-	  ft_putchar('\n');
+	  //ft_putchar('\n');
 	i++;
 	}
     }
