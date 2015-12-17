@@ -30,14 +30,7 @@ int	get_next_line(int const fd, char **line)
   ret = 0;
   if (str)
     {
-      /*      ft_redstr("//////////");
-      ft_greenstr("STR EXISTE");
-      ft_bluestr(" ||||||||\n");
-      ft_putstr(str);
-      ft_putchar('\n');*/
       stock = ft_strdup(str);
-      /*      ft_bluestr(stock);
-	      ft_putchar('\n');*/
       free(str);
       str = NULL;
     }
@@ -47,51 +40,32 @@ int	get_next_line(int const fd, char **line)
     {
       tmp[ret] = '\0';
       stop = ft_strchr(tmp, '\n');
-      /*      ft_greenstr("STOP ==");
-      ft_pinkchar('|');
-      ft_putnbr(stop);
-      ft_pinkchar('|');*/
-      //      ft_putchar('\n');
       if (stop >= 0)
 	{
-	  str = ft_strnew(ft_strlen(tmp) - stop - 1);
+	  str = ft_strnew(ft_strlen(tmp) - stop);
 	  stop++;
-	  /*	  ft_putchar('{');
-	  ft_putnbr(stop);
-	  ft_putchar('}');*/
 	  while (tmp[stop])
 	    {
 	      if (tmp[stop] == '\n')
 		{
-		  count = stop + 1;
+		  ft_pinkchar('X');
+		  count = stop - 1;
 		  stop++;
-		  //		  ft_putendl("ALERT");
 		}
 	      else
 		{
 		  str[i] = tmp[stop];
-		  /*ft_pinkchar('[');
-		  ft_pinkchar(str[i]);
-		  ft_pinkchar(']');*/
 		  stop++;
 		  i++;
 		}
 	    }
 	  str[i] = '\0';
-	  /*	  ft_greenstr("\n____________________\n");
-	  ft_bluestr("CECI EST LE CONTENU DE LA STATIC =-=> |");
-	  ft_redstr(str);
-	  ft_putchar('\n');
-	  ft_greenstr("CECI EST LE CONTENU DE MON BUFFER =-=> |");
-	  ft_bluestr(tmp);
-	  ft_greenstr("\n____________________\n");*/
-	  stock = ft_dupnstrcat(stock, tmp, ft_strlen(tmp) - stop);
+	  stock = ft_dupnstrcat(stock, tmp, count);//ft_strlen(tmp) - stop);
 	  *line = ft_strdup(stock);
 	  return (ret);
-	 
 	}
       else 
-	  stock = ft_dupstrcat(stock, tmp);
+	stock = ft_dupstrcat(stock, tmp);
     }
   *line = ft_strdup(stock);
   free(stock);
@@ -114,9 +88,8 @@ int	main(int ac, char **av)
       fd = open(av[1], O_RDONLY);
       while ((ret = get_next_line(fd, &line[i])))
 	{
-	  //	  ft_redstr("CECI EST LE RETOUR DE GNL -=->");
 	  ft_bluestr(line[i]);
-	  //ft_putchar('\n');
+	  ft_putchar('\n');
 	i++;
 	}
     }

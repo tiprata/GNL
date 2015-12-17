@@ -20,6 +20,7 @@
 # include <unistd.h>
 # define BUF_SIZE 5
 
+void    ft_redstr(char *str);
 void    ft_pinkchar(char c);
 void    ft_bluestr(char *str);
 void    ft_pinkstr(char *str);

@@ -22,5 +22,5 @@ int	ft_strchr(const char *s, int c)
 	if (s[i] == c)
 		return (i);
 	else
-		return (0);
+		return (-1);
 }

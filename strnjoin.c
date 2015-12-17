@@ -16,20 +16,22 @@
 
 char	*ft_strnjoin(char *s1, char *s2, int n)
 {
-	int	i;
-	int	j;
-	char	*str;
-	int	k;
+  int	i;
+  int	j;
+  char	*str;
+  int	k;
 
-	k = 0;
-	j = ft_strlen(s1) + ft_strlen(s2) - n;
-	if (!(str = (char *)malloc(sizeof(char) * (j + 1))))
-		return (NULL);
-	i = -1;
-	while (++i < ft_strlen(s1))
-		str[i] = s1[i];
-	while (i < j && s2[k])
-		str[i++] = s2[k++];
-	str[i] = '\0';
-	return (str);
+  k = 0;
+  j = ft_strlen(s1) + ft_strlen(s2) - n;
+  if (!(str = (char *)malloc(sizeof(char) * (j + 1))))
+    return (NULL);
+  i = -1;
+  while (++i < ft_strlen(s1))
+    str[i] = s1[i];
+  while (i <= j && s2[k])
+    {
+      str[i++] = s2[k++];
+    }
+  str[i] = '\0';
+  return (str);
 }

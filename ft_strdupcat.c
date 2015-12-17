@@ -17,9 +17,9 @@ char    *ft_dupstrcat(char *s1, char *s2)
     char *str;
 
     if (!(str = (char *)malloc(sizeof(char) * ft_strlen(s1) + 1 +
-							   ft_strlen(s2))))
-        return (NULL);
-	str = ft_strjoin(s1, s2);
-	free (s1);
+			       ft_strlen(s2))))
+      return (NULL);
+    str = ft_strjoin(s1, s2);
+    free (s1);
     return (str);
 }
