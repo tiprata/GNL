@@ -35,6 +35,41 @@ void	ft_putstr(char *str)
   write(1, str, ft_strlen(str));
 }
 
+void    ft_pinkstr(char *str)
+{
+  ft_putstr("\x1B[35m");
+  write(1, str, ft_strlen(str));
+  ft_putstr("\033[0m");
+}
+
+void    ft_pinkchar(char c)
+{
+  ft_putstr("\x1B[35m");
+  write(1, &c, 1);
+  ft_putstr("\033[0m");
+}
+
+void    ft_redstr(char *str)
+{
+  ft_putstr("\x1B[31m");
+  write(1, str, ft_strlen(str));
+  ft_putstr("\033[0m");
+}
+
+void    ft_bluestr(char *str)
+{
+  ft_putstr("\x1B[36m");
+  write(1, str, ft_strlen(str));
+  ft_putstr("\033[0m");
+}
+
+void    ft_greenstr(char *str)
+{
+  ft_putstr("\x1B[32m");
+  write(1, str, ft_strlen(str));
+  ft_putstr("\033[0m");
+}
+
 void    ft_putnbr(int n)
 {
   if (n == -2147483648)
@@ -50,6 +85,21 @@ void    ft_putnbr(int n)
     {
       ft_putnbr(n / 10);
       ft_putnbr(n % 10);
+    }
+}
+
+void    ft_putab(char **str)
+{
+  int i;
+
+  i = 0;
+  while (str[i])
+    {
+      ft_putstr("\x1B[32m");
+      ft_putstr(str[i]);
+      ft_putchar('\n');
+      ft_putstr("\033[0m");
+      i++;
     }
 }
 
@@ -83,29 +133,34 @@ void    *ft_memalloc(size_t size)
 char	**ft_resize_map(char **str, t_pos lpos, t_pos rtpos)
 {
   char **ret;
-  t_pos tmpos;
   int tmp;
+  int i;
+  int j;
+  int tmp2;
 
+  tmp2 = lpos.x;
+  j = 0;
+  i = 0;
   tmp = 0;
-  tmpos.x = 0;
-  tmpos.y = 0;
-  if (!(ret = ft_memalloc(lpos.x - rtpos.x)))
+  if (!(ret = (char **)malloc(sizeof(char *) * rtpos.x + 1)))
     return (NULL);
-  while (ret[tmpos.x])
+  while (i <= rtpos.x)
     {
-      if (!(ret[tmpos.x] = ft_memalloc(lpos.y - rtpos.y)))
-	return (NULL);
       tmp = lpos.y;
-      while (tmpos.y <= rtpos.y)
+      if (!(ret[i] = (char *)malloc(sizeof(char) * rtpos.y - lpos.y + 1)))
+	return (NULL);
+      while (tmp <= rtpos.y && str[tmp2][tmp] && tmp2 <= rtpos.x)
 	{
-	  ret[tmpos.y] = str[tmp];
+	  ret[i][j] = str[tmp2][tmp];
+	  j++;
 	  tmp++;
-	  tmpos.y++;
 	}
-	tmpos.y = 0;
-	lpos.y = tmp;
-	tmpos.x++;
+      ret[i][j] = '\0';
+      j = 0;
+      i++;
+      tmp2++;
     }
+  ret[i] = NULL;
   return (ret);
 }
 
@@ -153,6 +208,7 @@ char	**ft_essential(char **tetra)
 {
   t_pos lpos;
   t_pos rtpos;
+  char **str = NULL;
 
   rtpos.x = 0;
   rtpos.y = 0;
@@ -167,7 +223,9 @@ char	**ft_essential(char **tetra)
 	      rtpos = lpos;
 	      rtpos = ft_rtpos(rtpos, tetra);
 	      lpos = ft_lpos(lpos, tetra);
-	      return (ft_resize_map(tetra, lpos, rtpos));
+	      ft_putab(tetra);
+	      str = ft_resize_map(tetra, lpos, rtpos);
+	      return (str);
 	    }
 	  else
 	    lpos.y++;
@@ -194,10 +252,11 @@ int	main(void)
   str[4] = NULL;
 
   str = ft_essential(str);
-
+  ft_greenstr("DA RESULT\n");
   while (str[i])
     {
       ft_putstr(str[i]);
+            ft_putchar('\n');
       i++;
     }
   return (0);
