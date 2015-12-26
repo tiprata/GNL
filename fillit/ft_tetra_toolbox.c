@@ -173,13 +173,29 @@ t_pos	ft_rtpos(t_pos rtpos, char **tetra)
   count = 0;
   i = 0;
   tmp = rtpos.y;
-  while (tetra[rtpos.x + 1][tmp] == '#' && tetra[rtpos.x][tmp])
+  while (tetra[rtpos.x][tmp] == '#' && tetra[rtpos.x][tmp])
     {
-      while (tetra[rtpos.x][tmp + count] == '#' && tetra[rtpos.x][tmp + count + 1])
+      ft_redstr("rtpos.x = ");
+      ft_putnbr(rtpos.x);
+      ft_putchar('\n');
+      ft_greenstr("tmp + count = ");
+      ft_putnbr(tmp + count);
+      ft_putchar('\n');
+      while (tetra[rtpos.x][tmp + count] == '#' && tetra[rtpos.x][tmp + count])
+	{
+	  ft_putstr("count = ");
+	  ft_putchar(tetra[rtpos.x][tmp + count]);
+	  ft_putnbr(count);
+	  ft_putchar('\n');
 	  count++;
+	}
       rtpos.y = count + tmp;
+      ft_bluestr("rtpos.y = ");
+      ft_putnbr(rtpos.y);
+      ft_putchar('\n');
       rtpos.x++;
     }
+  ft_redstr("CECI EST LA FIN DE CETTE FONCTION\n");
   return (rtpos);
 }
 
@@ -221,6 +237,7 @@ char	**ft_essential(char **tetra)
 	  if (tetra[lpos.x][lpos.y] == '#' && lpos.x <= 3 && lpos.y <= 3)
 	    {
 	      rtpos = lpos;
+	      ft_redstr("OKOKOKOKOKOK\n");
 	      rtpos = ft_rtpos(rtpos, tetra);
 	      lpos = ft_lpos(lpos, tetra);
 	      ft_putab(tetra);
@@ -246,9 +263,9 @@ int	main(void)
   str[2] = (char *)malloc(sizeof(char) + 5);
   str[3] = (char *)malloc(sizeof(char) + 5);
   str[0] = "....";
-  str[1] = "..#.";
-  str[2] = ".###";
-  str[3] = "....";
+  str[1] = ".#..";
+  str[2] = ".##.";
+  str[3] = ".#..";
   str[4] = NULL;
 
   str = ft_essential(str);
