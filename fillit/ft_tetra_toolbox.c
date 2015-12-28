@@ -266,7 +266,6 @@ int     ft_check_hor_length_down(char **str)
   stop = 0;
   i = ft_tablen(str) - 1;
   j = 0;
-  ft_putnbr(i);
   while (i >= 0)
     {
       while (str[i][j])
@@ -312,11 +311,61 @@ char    **ft_resize3(char **str)
   return (tab);
 
 }
-/*
+
+int     ft_check_vert_len_left(char **str)
+{
+  int i;
+  int j;
+  int stop;
+  int ok;
+
+  i = 0;
+  j = 0;
+  stop = 0;
+  ok = 0;
+  while (stop != 1)
+    {
+      while (str[i])
+        {
+          if (str[i][j] == '#')
+            stop = 1;
+          i++;
+        }
+      if (stop == 1)
+        break;
+      ok = stop == 1 ? ok : ok + 1;
+      j++;
+      i = 0;
+    }
+  return (ok);
+}
+
 char    **ft_resize4(char **str)
 {
+  int i;
+  int j;
+  char **tab;
+  int ok;
+  int x;
 
-}*/
+  i = 0;
+  x = 0;
+  ok = ft_check_vert_len_left(str);
+  j = ok;
+  if (!(tab = (char **)ft_memalloc(sizeof(char *) * ft_tablen(str) + 1)))
+    return (NULL);
+  while (str[i])
+    {
+      if (!(tab[i] = (char *)ft_memalloc(sizeof(char) * ft_strlen(str[0]) - ok)))
+        return (NULL);
+      while (j < ft_strlen(str[0]))
+          tab[i][x++] = str[i][j++];
+      x = 0;
+      j = ok;
+      i++;
+    }
+  return (tab);
+}
 
 int     main(void)
 {
@@ -335,9 +384,8 @@ int     main(void)
 
   str = ft_resize1(str);
   str = ft_resize2(str);
-  ft_putab(str);
   str = ft_resize3(str);
-  // str = ft_essential(str);
+  str = ft_resize4(str);
   ft_greenstr("DA RESULT\n");
   while (str[i])
     {
