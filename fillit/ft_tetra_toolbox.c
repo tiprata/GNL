@@ -129,7 +129,6 @@ void    *ft_memalloc(size_t size)
   return (result);
 }
 
-
 char	**ft_resize_map(char **str, t_pos lpos, t_pos rtpos)
 {
   char **ret;
@@ -137,16 +136,18 @@ char	**ft_resize_map(char **str, t_pos lpos, t_pos rtpos)
   int i;
   int j;
   int tmp2;
-
-  tmp2 = lpos.x;
+tmp2 = lpos.x;
   j = 0;
   i = 0;
   tmp = 0;
-  if (!(ret = (char **)malloc(sizeof(char *) * rtpos.x + 1)))
-    return (NULL);
+  if (!(ret = ft_memalloc(rtpos.x + 1)))
+    return NULL;
   while (i <= rtpos.x)
     {
       tmp = lpos.y;
+      ft_putstr("rtpos.y - lpos.y + 1 = ");
+      ft_putnbr(rtpos.y - lpos.y + 1);
+      ft_putchar('\n');
       if (!(ret[i] = (char *)malloc(sizeof(char) * rtpos.y - lpos.y + 1)))
 	return (NULL);
       while (tmp <= rtpos.y && str[tmp2][tmp] && tmp2 <= rtpos.x)
@@ -160,8 +161,45 @@ char	**ft_resize_map(char **str, t_pos lpos, t_pos rtpos)
       i++;
       tmp2++;
     }
-  ret[i] = NULL;
   return (ret);
+}
+
+t_pos	ft_rtpos2(t_pos rtpos, char **tetra)
+{
+  int i;
+  int tmp;
+  int count;
+
+  count = 0;
+  i = 0;
+  tmp = rtpos.x;
+  ft_greenstr("JE SUIS DANS RTPOS2\n");
+  while (rtpos.y < 4 && tetra[tmp][rtpos.y] && tetra[tmp][rtpos.y] == '#')
+    {
+      ft_redstr("JE SUIS DANS LE WHILE\n");
+      ft_greenstr("tmp + count = ");
+      ft_putnbr(tmp + count);
+      ft_putchar('\n');
+      ft_bluestr("rtpos.y = ");
+      ft_putnbr(rtpos.y);
+      ft_putchar('\n');
+      //if (tetra[tmp + count][rtpos.y] == '#' && tmp + count < 4 && rtpos.y < 4)
+      while (tetra[tmp + count][rtpos.y] == '#' && tmp + count < 4 && rtpos.y < 4)
+	{
+	  if (tetra[tmp + count + 1][rtpos.y] == '#')
+	    {
+	      ft_bluestr("COUNTPLUSPLUS\n");
+	      count++;
+	    }
+	  else
+	    break ;
+	}
+      if (rtpos.x < count + tmp)
+	rtpos.x = count + tmp;
+      rtpos.y++;
+      count = 0;
+    }
+  return (rtpos);
 }
 
 t_pos	ft_rtpos(t_pos rtpos, char **tetra)
@@ -173,33 +211,81 @@ t_pos	ft_rtpos(t_pos rtpos, char **tetra)
   count = 0;
   i = 0;
   tmp = rtpos.y;
-  while (tetra[rtpos.x][tmp] == '#' && tetra[rtpos.x][tmp])
+  if (rtpos.x < 4  && tetra[rtpos.x][tmp] && tetra[rtpos.x + 1][tmp] == '#')
     {
-      ft_redstr("rtpos.x = ");
-      ft_putnbr(rtpos.x);
-      ft_putchar('\n');
-      ft_greenstr("tmp + count = ");
-      ft_putnbr(tmp + count);
-      ft_putchar('\n');
-      while (tetra[rtpos.x][tmp + count] == '#' && tetra[rtpos.x][tmp + count])
+      while (rtpos.x < 4 && tetra[rtpos.x][tmp] && tetra[rtpos.x + 1][tmp] == '#')
 	{
-	  ft_putstr("count = ");
-	  ft_putchar(tetra[rtpos.x][tmp + count]);
-	  ft_putnbr(count);
-	  ft_putchar('\n');
-	  count++;
+	  while (tetra[rtpos.x][tmp + count] == '#' && tmp + count < 4 && rtpos.x < 4)
+	    {
+	      if (tetra[rtpos.x][tmp + count + 1] == '#')
+		count++;
+	      else
+		break ;
+	    }
+	  if (rtpos.y < count + tmp)
+	    rtpos.y = count + tmp;
+	  rtpos.x++;
+	  count = 0;
 	}
-      rtpos.y = count + tmp;
-      ft_bluestr("rtpos.y = ");
-      ft_putnbr(rtpos.y);
-      ft_putchar('\n');
-      rtpos.x++;
     }
-  ft_redstr("CECI EST LA FIN DE CETTE FONCTION\n");
+  else if (rtpos.y < 4 && tetra[rtpos.x][tmp + 1]  && tetra[rtpos.x][tmp] && tetra[rtpos.x][tmp + 1] == '#')
+    {
+      rtpos.y++;
+      return (ft_rtpos2(rtpos, tetra));
+    }
+  ft_greenstr("rtpos.x = ");
+  ft_putnbr(rtpos.x);
+  ft_putchar('\n');
+  ft_bluestr("rtpos.y = ");
+  ft_putnbr(rtpos.y);
+  ft_putchar('\n');
   return (rtpos);
 }
 
 t_pos	ft_lpos(t_pos lpos, char **tetra)
+{
+  int i;
+  int tmp;
+  int count;
+  int tmp2;
+  count = 0;
+  i = 0;
+  tmp2 = lpos.x;  
+  tmp = lpos.y;
+  while (lpos.x < 4 && tetra[lpos.x][tmp] && tetra[lpos.x + 1][tmp] == '#')
+    {
+      ft_greenstr("TOUR DU X\n");
+      ft_greenstr("lpos.y = ");
+      ft_putnbr(lpos.y);
+      ft_putchar('\n');
+      while (tetra[lpos.x][tmp - count - 1] == '#' && tmp - count >= 0 && lpos.x < 4)
+	{
+	  ft_bluestr("TOUR DU Y\n");
+	  if (tetra[lpos.x][tmp - count - 1] == '#')
+	    {
+	      ft_putstr("OKOK\n");
+	      count++;
+	    }
+	  else
+	    break ;
+	}
+      if (lpos.y > tmp - count)
+	lpos.y = tmp - count;
+      lpos.x++;
+      count = 0;
+      ft_putchar('\n');
+    }
+  lpos.x = tmp2;
+  ft_greenstr("\nlpos.x = ");
+  ft_putnbr(lpos.x);
+  ft_putchar('\n');
+  ft_bluestr("lpos.y = ");
+  ft_putnbr(lpos.y);
+  ft_putchar('\n');
+  return (lpos);
+}
+
+/*t_pos	ft_lpos(t_pos lpos, char **tetra)
 {
   int i;
   int tmp;
@@ -218,7 +304,7 @@ t_pos	ft_lpos(t_pos lpos, char **tetra)
       tmp2++;
     }
   return (lpos);
-}
+  }*/
 
 char	**ft_essential(char **tetra)
 {
@@ -237,12 +323,16 @@ char	**ft_essential(char **tetra)
 	  if (tetra[lpos.x][lpos.y] == '#' && lpos.x <= 3 && lpos.y <= 3)
 	    {
 	      rtpos = lpos;
-	      ft_redstr("OKOKOKOKOKOK\n");
-	      rtpos = ft_rtpos(rtpos, tetra);
-	      lpos = ft_lpos(lpos, tetra);
-	      ft_putab(tetra);
-	      str = ft_resize_map(tetra, lpos, rtpos);
-	      return (str);
+	      ft_redstr("OKOKOK\n");
+              rtpos = ft_rtpos(rtpos, tetra);
+              lpos = ft_lpos(lpos, tetra);
+	                    ft_putab(tetra);
+              str = ft_resize_map(tetra, lpos, rtpos);
+	      ft_redstr(str[0]);
+	      ft_putchar('\n');
+	      ft_redstr(str[1]);
+	      ft_putchar('\n');
+            return (str);
 	    }
 	  else
 	    lpos.y++;
@@ -253,28 +343,33 @@ char	**ft_essential(char **tetra)
   return (NULL);
 }
 
+
 int	main(void)
 {
-  int i = 0;
+  //  int i = 0;
   char **str;
   str = (char **)malloc(sizeof(char *) + 5);
   str[0] = (char *)malloc(sizeof(char) + 5);
   str[1] = (char *)malloc(sizeof(char) + 5);
   str[2] = (char *)malloc(sizeof(char) + 5);
   str[3] = (char *)malloc(sizeof(char) + 5);
-  str[0] = "....";
-  str[1] = ".#..";
-  str[2] = ".##.";
-  str[3] = ".#..";
+  str[0] = "##..";
+  str[1] = ".##.";
+  str[2] = "....";
+  str[3] = "....";
   str[4] = NULL;
 
   str = ft_essential(str);
   ft_greenstr("DA RESULT\n");
-  while (str[i])
+  ft_bluestr(str[0]);
+  ft_putchar('\n');
+  ft_bluestr(str[1]);
+  ft_putchar('\n');
+  /*  while (str[i])
     {
       ft_putstr(str[i]);
             ft_putchar('\n');
       i++;
-    }
+      }*/
   return (0);
 }
