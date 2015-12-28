@@ -376,10 +376,10 @@ int     main(void)
   str[1] = (char *)malloc(sizeof(char) + 5);
   str[2] = (char *)malloc(sizeof(char) + 5);
   str[3] = (char *)malloc(sizeof(char) + 5);
-  str[0] = "....";
-  str[1] = ".##.";
-  str[2] = ".##.";
-  str[3] = "....";
+  str[0] = "#...";
+  str[1] = "#...";
+  str[2] = "#...";
+  str[3] = "#...";
   str[4] = NULL;
 
   str = ft_resize1(str);
