@@ -193,6 +193,8 @@ char    **ft_resize1(char **str)
       i++;
       ok++;
     }
+  free(str);
+  str = NULL;
   return (tab);
 }
 
@@ -252,6 +254,8 @@ char    **ft_resize2(char **str)
       j = 0;
       i++;
     }
+  free(str);
+  str = NULL;
   return (tab);
 }
 
@@ -308,6 +312,8 @@ char    **ft_resize3(char **str)
       start++;
       i++;
     }
+  free(str);
+  str = NULL;
   return (tab);
 
 }
@@ -364,6 +370,8 @@ char    **ft_resize4(char **str)
       j = ok;
       i++;
     }
+  free (str);
+  str = NULL;
   return (tab);
 }
 
@@ -376,9 +384,10 @@ t_off ft_find_first_sharp(char **str, t_off pos)
     while (str[pos.x][pos.y])
     {
       if (str[pos.x][pos.y] == '#')
-        return (pos)
+        return (pos);
       pos.y++;
     }
+    pos.y = 0;
     pos.x++;
   }
   return (pos);
@@ -393,7 +402,7 @@ int   ft_is_stick(char **str)
     return (-1);
   if (pos.y == 0 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x][pos.y + 3] == '#')
     return (1);
-  if (pos.x == 0 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#' && str[pos.x + 3][pos.y + 3] == '#')
+  if (pos.x == 0 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#' && str[pos.x + 3][pos.y] == '#')
     return (1);
   return (0);
 }
@@ -425,7 +434,14 @@ int	ft_is_l(char **str)
     return (1);
   if (pos.x < 3 && pos.y < 2 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x + 1][pos.y] == '#')
     return (1);
-  //IL MANQUE LA MOITIE
+  if (pos.x < 2 && pos.y > 0 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#' && str[pos.x + 2][pos.y - 1] == '#')
+    return (1);
+  if (pos.x < 3 && pos.y < 2 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x + 1][pos.y + 2] == '#')
+    return (1);
+  if (pos.x < 2 && pos.y < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#')
+    return (1);
+  if (pos.x < 3 && pos.y < 2 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 2] == '#')
+    return (1);
   return (0);
 } 
 
@@ -439,9 +455,9 @@ int	ft_is_t(char **str)
     return (-1);
   if (pos.x < 3 && pos.y > 0 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 1][pos.y - 1] == '#')
     return (1);
-  if (pos.x < 2 && pos.y > 0 str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#' && str[pos.x + 2][pos.y] == '#')
+  if (pos.x < 2 && pos.y > 0 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#' && str[pos.x + 2][pos.y] == '#')
     return (1);
-  if (pos.x > 0 && pos.y < 2 str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x - 1][pos.y + 1] == '#')
+  if (pos.x > 0 && pos.y < 2 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x - 1][pos.y + 1] == '#')
     return (1);
   if (pos.x < 2 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 2][pos.y] == '#')
     return (1);
@@ -455,7 +471,7 @@ int   ft_is_sharp(char **str)
   pos = ft_find_first_sharp(str, pos);
   if (str[pos.x][pos.y] == '\0')
     return (-1);
-  if (pos.y > 0 && pos.y < 3 && pos.x < 3 str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#')
+  if (pos.y > 0 && pos.y < 3 && pos.x < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#')
     return (1);
   if (pos.y < 2 && pos.x < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 2] == '#')
     return (1);
@@ -466,33 +482,79 @@ int   ft_is_sharp(char **str)
   return (0);
 }
 
-int   ft_check_error(t_tetra **list, char **str)
+int	ft_count_sharp(char **str)
 {
-  int erret;
+  t_off	pos;
+  int nb;
 
-  erret = 0;
+  nb = 0;
+  pos.x = 0;
+  pos.y = 0;
+  while (str[pos.x])
+    {
+      while (str[pos.x][pos.y])
+	{
+	  if (str[pos.x][pos.y] != '#' && str[pos.x][pos.y] != '.' && str[pos.x][pos.y] != '\0')
+	    return (-1);
+	  if (str[pos.x][pos.y] == '#')
+	    nb++;
+	  pos.y++;
+	}
+      pos.y = 0;
+      pos.x++;
+    }
+  if (nb != 4)
+    return (-1);
+  else
+    return (0);
+}
+
+int	ft_check_error_second(char **str, int erret)
+{
+  if ((erret = ft_is_l(str)) && erret == 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if ((erret = ft_is_sharp(str)) && erret == 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
   if ((erret = ft_is_t(str)) && erret == 1)
     return (1);
   else if (erret == -1)
     return (-1);
-  if ((erret = ft_is_square(str)) && errret = 1)
+  if ((erret = ft_is_square(str)) && erret == 1)
     return (1);
   else if (erret == -1)
     return (-1);
-  if ((erret = ft_is_stick(str)) && erret = 1)
+  if ((erret = ft_is_stick(str)) && erret == 1)
     return (1);
   else if (erret == -1)
     return (-1);
-  if ((erret = ft_is_l(str)) && erret = 1)
-    return (1);
-  else if (erret == -1)
+  return (0);
+}
+
+int	ft_check_error(t_tetra **list, char **str)
+{
+  int erret;
+
+  erret = 0;
+  if ((erret = ft_count_sharp(str)) && erret == -1)
     return (-1);
-  if ((erret = ft_is_sharp(str)) && erret = 1)
-    return (1);
+  if ((erret = ft_check_error_second(str, erret)) && erret == 1)
+    {
+      str = ft_resize1(str);
+      str = ft_resize2(str);
+      str = ft_resize3(str);
+      str = ft_resize4(str);
+      ft_tetra_add(&list, tab);      
+      return (1);
+    }
   else if (erret == -1)
     return (-1);
   if (erret == 0)
-  return (-1);
+    return (-1);
+  return (1);
 }
 
 int   ft_file_parser(int fd)
@@ -508,9 +570,7 @@ int   ft_file_parser(int fd)
   while (get_next_line(fd, &line))
   {
     if (ft_strlen(line) == 4)
-    {
-      tab[i] = line;
-    }
+      tab[i++] = line;
     else if (ft_strlen(line) == 0 && i == 4)
     {
       i = 0;
@@ -518,24 +578,40 @@ int   ft_file_parser(int fd)
       if (!(ft_check_error(&list, tab)))
         return (-1);
     }
+    else
+      return (-1);
   }
 }
 
 int     main(void)
 {
   int i = 0;
-
-
-  str = ft_resize1(str);
-  str = ft_resize2(str);
-  str = ft_resize3(str);
-  str = ft_resize4(str);
-  ft_greenstr("DA RESULT\n");
-  while (str[i])
+  char **str;
+  str = (char **)ft_memalloc(sizeof(char *) * 5);//(char **)malloc(sizeof(char *) + 5);
+  str[0] = (char *)ft_memalloc(sizeof(char) * 5);
+  str[1] = (char *)ft_memalloc(sizeof(char) * 5);
+  str[2] = (char *)ft_memalloc(sizeof(char) * 5);
+  str[3] = (char *)ft_memalloc(sizeof(char) * 5);
+  str[0] = "#...";
+  str[1] = "#...";
+  str[2] = "#...";
+  str[3] = "#...";
+  //  str[4] = NULL;
+  if (ft_check_error(str) == -1)
+    return (0);
+  else
     {
-      ft_putstr(str[i]);
-      ft_putchar('\n');
-      i++;
+      str = ft_resize1(str);
+      str = ft_resize2(str);
+      str = ft_resize3(str);
+      str = ft_resize4(str);
+      ft_greenstr("DA RESULT\n");
+      while (str[i])
+	{
+	  ft_putstr(str[i]);
+	  ft_putchar('\n');
+	  i++;
+	}
+      return (0);
     }
-  return (0);
 }
