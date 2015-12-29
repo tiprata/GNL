@@ -367,20 +367,144 @@ char    **ft_resize4(char **str)
   return (tab);
 }
 
+t_off ft_find_first_sharp(char **str, t_off pos)
+{
+  pos.x = 0;
+  pos.y = 0;
+  while (str[pos.x])
+  {
+    while (str[pos.x][pos.y])
+    {
+      if (str[pos.x][pos.y] == '#')
+        return (pos)
+      pos.y++;
+    }
+    pos.x++;
+  }
+  return (pos);
+}
+
+int   ft_is_stick(char **str)
+{
+  t_off pos;
+
+  pos = ft_find_first_sharp(str, pos);
+  if (str[pos.x][pos.y] == '\0')
+    return (-1);
+  if (pos.y == 0 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x][pos.y + 3] == '#')
+    return (1);
+  if (pos.x == 0 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#' && str[pos.x + 3][pos.y + 3] == '#')
+    return (1);
+  return (0);
+}
+
+int	ft_is_square(char **str)
+{
+  t_off pos;
+
+  pos = ft_find_first_sharp(str, pos);
+  if (str[pos.x][pos.y] == '\0')
+    return (-1);
+  if (pos.x < 3 && pos.y < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#')
+    return (1);
+  return (0);
+} 
+
+int	ft_is_t(char **str)
+{
+  t_off pos;
+
+  pos = ft_find_first_sharp(str, pos);
+  if (str[pos.x][pos.y] == '\0')
+    return (-1);
+  if (pos.x < 3 && pos.y > 0 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 1][pos.y - 1] == '#')
+    return (1);
+  if (pos.x < 2 && pos.y > 0 str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#' && str[pos.x + 2][pos.y] == '#')
+    return (1);
+  if (pos.x > 0 && pos.y < 2 str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x - 1][pos.y + 1] == '#')
+    return (1);
+  if (pos.x < 2 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 2][pos.y] == '#')
+    return (1);
+  return (0);
+} 
+
+int   ft_is_sharp(char **str)
+{
+  t_off pos;
+
+  pos = ft_find_first_sharp(str, pos);
+  if (str[pos.x][pos.y] == '\0')
+    return (-1);
+  if (pos.y > 0 && pos.y < 3 && pos.x < 3 str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#')
+    return (1);
+  if (pos.y < 2 && pos.x < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 2] == '#')
+    return (1);
+  if (pos.x < 2 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 2][pos.y + 1] == '#')
+    return (1);
+  if (pos.y > 0 && pos.x < 2 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#' && str[pos.x + 2][pos.y - 1] == '#')
+    return (1);
+  return (0);
+}
+
+int   ft_check_error(t_tetra **list, char **str)
+{
+  int erret;
+
+  erret = 0;
+  if ((erret = ft_is_t(str)) && erret == 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if ((erret = ft_is_square(str)) && errret = 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if ((erret = ft_is_stick(str)) && erret = 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if ((erret = ft_is_l(str)) && erret = 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if ((erret = ft_is_sharp(str)) && erret = 1)
+    return (1);
+  else if (erret == -1)
+    return (-1);
+  if (erret == 0)
+  return (-1);
+}
+
+int   ft_file_parser(int fd)
+{
+  t_tetra *list;
+  char *line;
+  char **tab;
+  int i;
+
+  i = 0;
+  if (!(tab = (char **)ft_memalloc(sizeof(char *) * 5)))
+   return (-1);
+  while (get_next_line(fd, &line))
+  {
+    if (ft_strlen(line) == 4)
+    {
+      tab[i] = line;
+    }
+    else if (ft_strlen(line) == 0 && i == 4)
+    {
+      i = 0;
+      ft_tetra_add(&list, tab);
+      if (!(ft_check_error(&list, tab)))
+        return (-1);
+    }
+  }
+}
+
 int     main(void)
 {
   int i = 0;
-  char **str;
-  str = (char **)malloc(sizeof(char *) + 5);
-  str[0] = (char *)malloc(sizeof(char) + 5);
-  str[1] = (char *)malloc(sizeof(char) + 5);
-  str[2] = (char *)malloc(sizeof(char) + 5);
-  str[3] = (char *)malloc(sizeof(char) + 5);
-  str[0] = "#...";
-  str[1] = "#...";
-  str[2] = "#...";
-  str[3] = "#...";
-  str[4] = NULL;
+
 
   str = ft_resize1(str);
   str = ft_resize2(str);
