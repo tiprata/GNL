@@ -410,6 +410,26 @@ int	ft_is_square(char **str)
   return (0);
 } 
 
+int	ft_is_l(char **str)
+{
+  t_off pos;
+
+  pos = ft_find_first_sharp(str, pos);
+  if (str[pos.x][pos.y] == '\0')
+    return (-1);
+  if (pos.x < 2 && pos.y < 3 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 2][pos.y] == '#' && str[pos.x + 2][pos.y + 1] == '#')
+    return (1);
+  if (pos.x < 3 && pos.y > 1 && str[pos.x + 1][pos.y] == '#' && str[pos.x + 1][pos.y - 1] == '#' && str[pos.x + 1][pos.y - 2] == '#')
+    return (1);
+  if (pos.x < 2 && pos.y < 3 && str[pos.x][pos.y + 1] == '#' && str[pos.x + 1][pos.y + 1] == '#' && str[pos.x + 2][pos.y + 1] == '#')
+    return (1);
+  if (pos.x < 3 && pos.y < 2 && str[pos.x][pos.y + 1] == '#' && str[pos.x][pos.y + 2] == '#' && str[pos.x + 1][pos.y] == '#')
+    return (1);
+  //IL MANQUE LA MOITIE
+  return (0);
+} 
+
+
 int	ft_is_t(char **str)
 {
   t_off pos;
