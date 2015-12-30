@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 16:30:50 by tiprata           #+#    #+#             */
-/*   Updated: 2015/12/30 18:47:47 by tiprata          ###   ########.fr       */
+/*   Updated: 2015/12/30 19:03:38 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	get_next_line(int const fd, char **line)
 	i = 0;
 	stop = 0;
 	ret = 0;
-	ft_greenstr("Function entry\n");
 	if (s.str != NULL)
 	{
 //		ft_greenstr(s.str);
@@ -71,8 +70,12 @@ int	get_next_line(int const fd, char **line)
 			//		ft_putnbr(stop);
 			//	ft_putchar('\n');
 			//	s.str = ft_strnew(ft_strlen(tmp) - stop - 1);
-			stock = ft_dupnstrcat(stock, tmp, stop + 1);
-			s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop + 1);
+			stock = ft_dupnstrcat(stock, tmp, stop - 1);
+			ft_redstr(tmp);
+			ft_putchar('{');
+			ft_putnbr(stop);
+			ft_putchar('}');
+			s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop - 1);
 			s.tmp = s.str;
 			if (!(line))
 				ft_greenstr("jump off the bridge");
@@ -90,7 +93,7 @@ int	get_next_line(int const fd, char **line)
 //	ft_putchar('|');
 //	ft_greenstr(stock);
 	ft_putchar('|');
-	ft_redstr("strdup\n");
+	ft_redstr(stock);
 	*line = ft_strdup(stock);
 	free(stock);
 	stock = NULL;
@@ -113,7 +116,7 @@ int	main(int ac, char **av)
 		while ((ret = get_next_line(fd, &line[i])))
 		{
 			ft_bluestr(line[i]);
-			ft_putchar('\n');
+//			ft_putchar('\n');
 			i++;
 		}
 	}
