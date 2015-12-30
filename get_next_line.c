@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 16:30:50 by tiprata           #+#    #+#             */
-/*   Updated: 2015/12/30 19:03:38 by tiprata          ###   ########.fr       */
+/*   Updated: 2015/12/30 19:39:58 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	get_next_line(int const fd, char **line)
 		stop = ft_strchr(s.str, '\n');
 		if (stop > 0)
 		{
-			*line = ft_strsub(s.str, 0, stop + 1);
+			*line = ft_strsub(s.str, 0, stop - 1);
 //			ft_bluestr(*line);
 			while (i <= stop + 1)
 			{
@@ -71,7 +71,7 @@ int	get_next_line(int const fd, char **line)
 			//	ft_putchar('\n');
 			//	s.str = ft_strnew(ft_strlen(tmp) - stop - 1);
 			stock = ft_dupnstrcat(stock, tmp, stop - 1);
-			ft_redstr(tmp);
+			ft_redstr(stock);
 			ft_putchar('{');
 			ft_putnbr(stop);
 			ft_putchar('}');
