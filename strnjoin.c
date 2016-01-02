@@ -22,7 +22,7 @@ char	*ft_strnjoin(char *s1, char *s2, int n)
   int	k;
 
   k = 0;
-  j = ft_strlen(s1) + ft_strlen(s2) - n;
+  j = ft_strlen(s1) + ft_strlen(s2) - (ft_strlen(s2) - n);
   if (!(str = (char *)malloc(sizeof(char) * (j + 1))))
     return (NULL);
   i = -1;
