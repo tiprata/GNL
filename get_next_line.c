@@ -25,14 +25,14 @@ int	get_next_line(int const fd, char **line)
   count = 0;
   j = 0;
   i = 0;
-  stop = 0;
+  stop = 0; // IF DEUX BACKSLASH N DAFFILE ATTENTION LA FONCTION BEUGUE
   if (s.str != NULL)
     {
       stop = ft_strchr(s.str, '\n');
       if (stop > 0)
 		{
 	  *line = ft_strsub(s.str, 0, stop - 1);
-	  while (i <= stop + 1)
+	  while (i != stop + 1)
 	    {
 	      s.str++;
 	      i++;
