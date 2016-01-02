@@ -18,8 +18,15 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# define BUF_SIZE 5
+# define BUF_SIZE 2
 
+
+typedef struct	s_rest
+{
+  char *str;
+  char *tmp;
+  int ret;
+}		t_rest;
 void    ft_redstr(char *str);
 void    ft_pinkchar(char c);
 void    ft_bluestr(char *str);
