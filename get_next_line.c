@@ -26,18 +26,12 @@ int	get_next_line(int const fd, char **line)
   j = 0;
   i = 0;
   stop = 0;
-  if (s.str != NULL && s.ret == BUF_SIZE)
+  if (s.str != NULL)
     {
-      //		ft_greenstr(s.str);
       stop = ft_strchr(s.str, '\n');
       if (stop > 0)
 		{
-		ft_redstr("this is a turn \n");
 	  *line = ft_strsub(s.str, 0, stop - 1);
-	  ft_putchar('\n');
-	  ft_greenstr(s.str);
-	  ft_putchar('\n');
-	  //			ft_bluestr(*line);
 	  while (i <= stop + 1)
 	    {
 	      s.str++;
@@ -48,57 +42,34 @@ int	get_next_line(int const fd, char **line)
 				free(s.tmp);
 				s.str = NULL;
 				s.tmp = NULL;
-			}
-			//		ft_redstr(stock);
-			return (s.ret);
+		}
+		return (s.ret);
 		}
 		stop = 0;
 		stock = ft_strdup(s.str);
-		free(s.str);
-		s.str = NULL;
 	}
 	else
-	{
 		stock = ft_memalloc(BUF_SIZE + 1);
-	}
 	while ((s.ret = read(fd, tmp, BUF_SIZE)))
     {
-    	ft_pinkchar('(');
-		ft_putnbr(s.ret);
-		ft_pinkchar(')');
 		tmp[s.ret] = '\0';
-		//ft_bluestr(tmp);
 		stop = ft_strchr(tmp, '\n');
-//		ft_putnbr(stop);
 		if (stop >= 0 && s.str == NULL)
 		{
-			//		ft_putnbr(stop);
-			//	ft_putchar('\n');
 			//	s.str = ft_strnew(ft_strlen(tmp) - stop - 1);
 			stock = ft_dupnstrcat(stock, tmp, stop - 1);
-			ft_redstr(stock);
-			ft_putchar('{');
-			ft_putnbr(stop);
-			ft_putchar('}');
 			s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop - 1);
 			s.tmp = s.str;
-			if (!(line))
-				ft_greenstr("jump off the bridge");
 			*line = ft_strdup(stock);
 			return (s.ret);
 		}
 		else
 		{
-//			ft_redstr("BREW UPDATE\n");
 			stock = ft_dupstrcat(stock, tmp);
 			free(s.str);
 			s.str = NULL;
 		}
     }
-//	ft_putchar('|');
-//	ft_greenstr(stock);
-	ft_putchar('|');
-	ft_redstr(stock);
 	*line = ft_strdup(stock);
 	free(stock);
 	stock = NULL;
@@ -125,10 +96,9 @@ int	main(int ac, char **av)
 	}
 	line[i] = NULL;
 	i = 0;
-	ft_putchar('\n');
 	while (line[i])
 	{
-		ft_bluestr(line[i]);
+		ft_putstr(line[i]);
 		ft_putchar('\n');
 		i++;
 	}
