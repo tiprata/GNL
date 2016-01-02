@@ -14,41 +14,43 @@
 
 int	get_next_line(int const fd, char **line)
 {
-	static t_rest s;
-	int ret;
-	char tmp[BUF_SIZE + 1];
-	int stop;
-	char *stock = NULL;
-	int i;
-	int j;
-	int count;
-	
-	count = 0;
-	j = 0;
-	i = 0;
-	stop = 0;
-	ret = 0;
-	if (s.str != NULL)
-	{
-//		ft_greenstr(s.str);
-		stop = ft_strchr(s.str, '\n');
-		if (stop > 0)
+  static t_rest s;
+  char tmp[BUF_SIZE + 1];
+  int stop;
+  char *stock = NULL;
+  int i;
+  int j;
+  int count;
+  
+  count = 0;
+  j = 0;
+  i = 0;
+  stop = 0;
+  if (s.str != NULL && s.ret == BUF_SIZE)
+    {
+      //		ft_greenstr(s.str);
+      stop = ft_strchr(s.str, '\n');
+      if (stop > 0)
 		{
-			*line = ft_strsub(s.str, 0, stop - 1);
-//			ft_bluestr(*line);
-			while (i <= stop + 1)
-			{
-				s.str++;
-				i++;
-			}
-			if (*s.str == '\0')
-			{
+		ft_redstr("this is a turn \n");
+	  *line = ft_strsub(s.str, 0, stop - 1);
+	  ft_putchar('\n');
+	  ft_greenstr(s.str);
+	  ft_putchar('\n');
+	  //			ft_bluestr(*line);
+	  while (i <= stop + 1)
+	    {
+	      s.str++;
+	      i++;
+	    }
+	  if (*s.str == '\0')
+	    {
 				free(s.tmp);
 				s.str = NULL;
 				s.tmp = NULL;
 			}
 			//		ft_redstr(stock);
-			return (fd);
+			return (s.ret);
 		}
 		stop = 0;
 		stock = ft_strdup(s.str);
@@ -59,9 +61,12 @@ int	get_next_line(int const fd, char **line)
 	{
 		stock = ft_memalloc(BUF_SIZE + 1);
 	}
-	while ((ret = read(fd, tmp, BUF_SIZE)))
+	while ((s.ret = read(fd, tmp, BUF_SIZE)))
     {
-		tmp[ret] = '\0';
+    	ft_pinkchar('(');
+		ft_putnbr(s.ret);
+		ft_pinkchar(')');
+		tmp[s.ret] = '\0';
 		//ft_bluestr(tmp);
 		stop = ft_strchr(tmp, '\n');
 //		ft_putnbr(stop);
@@ -80,7 +85,7 @@ int	get_next_line(int const fd, char **line)
 			if (!(line))
 				ft_greenstr("jump off the bridge");
 			*line = ft_strdup(stock);
-			return (ret);
+			return (s.ret);
 		}
 		else
 		{
@@ -97,7 +102,7 @@ int	get_next_line(int const fd, char **line)
 	*line = ft_strdup(stock);
 	free(stock);
 	stock = NULL;
-	return (ret);
+	return (s.ret);
 }
 
 int	main(int ac, char **av)
@@ -115,11 +120,17 @@ int	main(int ac, char **av)
 		fd = open(av[1], O_RDONLY);
 		while ((ret = get_next_line(fd, &line[i])))
 		{
-			ft_bluestr(line[i]);
-//			ft_putchar('\n');
 			i++;
 		}
 	}
 	line[i] = NULL;
+	i = 0;
+	ft_putchar('\n');
+	while (line[i])
+	{
+		ft_bluestr(line[i]);
+		ft_putchar('\n');
+		i++;
+	}
 	return (0);
 }
