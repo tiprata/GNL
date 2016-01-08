@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 16:30:50 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/07 18:13:27 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/08 16:31:27 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,105 +23,126 @@ int	get_next_line(int const fd, char **line)
   int count;
   int endof;
 
+  s.indic = 0;
   endof = 0;
   count = 0;
   j = 0;
   i = 0;
   stop = 0;
+  if (fd < 0 || line == NULL || *line == NULL)
+	  return (-1);
+  if (s.indic == 1)
+  {
+	  *line = ft_strdup("");
+	  s.indic = 0;
+	  return (s.ret == 0 ? 0 : 1);
+  }
   if (s.str != NULL)
   {
-	  ft_bluestr(s.str);
       stop = ft_strchr(s.str, '\n');
       if (stop > 0)
 	  {
-		  ft_putstr("_____");
-		  *line = ft_strsub(s.str, 0, stop - 1);
+		  if (!(*line = ft_strsub(s.str, 0, stop - 1)))
+			  return (-1);
 		  while (i != stop + 1)
 		  {
 			  s.str++;
 			  i++;
 		  }
+		  if (s.str[0] == '\n')
+			  s.indic = 1;
 		  if (*s.str == '\0')
 		  {
 			  free(s.tmp);
 			  s.str = NULL;
 			  s.tmp = NULL;
 		  }
-		  return (s.ret);
+//		  ft_putstr("ENDOF NON FIN\n");
+		  return (1);
 	  }
 	  stop = 0;
-	  stock = ft_strdup(s.str);
+	  if (!(stock = ft_strdup(s.str)))
+		  return (-1);
 	  if (s.ret == 0)
 	  {
-		  ft_pinkchar('X');
 		  *line = ft_strdup(stock);
-		  return (s.ret);
+//		  ft_putstr("ENDOF FILE\n");
+		  return (0);
 	  }
-	  ft_pinkchar('[');
-	  ft_greenstr(stock);
-	  ft_pinkchar(']');
   }
   else
-	  stock = ft_memalloc(BUF_SIZE + 1);
+	  if (!(stock = ft_memalloc(BUF_SIZE + 1)))
+		  return (-1);
   while ((s.ret = read(fd, tmp, BUF_SIZE)))
   {
 	  tmp[s.ret] = '\0';
+	  if (tmp[0] == '\0' && s.ret == 0)
+	  {
+		  *line = ft_strdup("");
+		  return (0);
+	  }
 	  stop = ft_strchr(tmp, '\n');
 	  if (stop >= 0 && s.str == NULL)
 	  {
-		  stock = ft_dupnstrcat(stock, tmp, stop - 1);
-		  s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop + 1);
+		  if (tmp[stop + 1] == '\n')
+		  {
+			  s.indic = 1;
+		  }
+		  if (!(stock = ft_dupnstrcat(stock, tmp, stop - 1)))
+			  return (-1);
+		  if (!(s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop + 1)))
+			  return (-1);
 		  s.tmp = s.str;
-		  *line = ft_strdup(stock);
-		  ft_redstr(*line);
-		  ft_bluestr("||");
-		  return (s.ret);
+		  if (!(*line = ft_strdup(stock)))
+			  return (-1);
+//		  ft_putstr("ENDOF NON\n");
+		  return (1);
 	  }
-	  else// if (stop < 0)
+	  else
 	  {
-		  stock = ft_dupstrcat(stock, tmp);
-		  ft_putstr("-->");
-		  ft_bluestr(stock);
-		  ft_putstr("<--");
+		  if (!(stock = ft_dupstrcat(stock, tmp)))
+			  return (-1);
 		  free(s.str);
 		  s.str = NULL;
 	  }
   }
-  *line = ft_strdup(stock);
+  if (!(*line = ft_strdup(stock)))
+	  return (-1);
+  if (s.ret == 0)
+  {
+	  if (*line[0] == '\n')
+		  *line = ft_strdup("");
+	  return (0);
+  }
   free(stock);
   stock = NULL;
-  return (s.ret);
+  return (1);
 }
 
-int	main(int ac, char **av)
+/*int		main(int ac, char **av)
 {
-	int fd;
+	char **str;
+	int i = 0;;
 	int ret;
-	char **line = NULL;
-	int i;
+	int count;
+	int fd;
 
-	i = 0;
-		line = (char **)malloc(sizeof(char *) * 10);
-	ret = 0;
-	if (ac > 1)
+
+	if (ac)
+		fd = open(av[1], O_RDONLY);		
+	count = 0;
+	str = (char **)ft_memalloc(sizeof(char *) * 5);
+	while (count != 1)
 	{
-		fd = open(av[1], O_RDONLY);
-		while ((ret = get_next_line(fd, &line[i])) || ret == 0)
-		{
-			ft_putchar('\n');
-			ft_putendl(line[i]);
-			i++;
-			if (ret == 0)
-				break ;
-		}
-	}
-	line[i] = NULL;
-/*	i = 0;
-	while (line[i])
-	{
-		ft_putstr(line[i]);
-		ft_putchar('\n');
+		ret = get_next_line(fd, &str[i]);
+		if (ret == 0)
+			count = 1;
+		ft_putstr(str[i]);
+		ft_putstr("||");
+		ft_putchar(str[i][0]);
+		ft_putstr("||");
 		i++;
-		}*/
-	return (0);
-}
+		ft_putnbr(i);
+	}
+	return 0;
+	}*/
