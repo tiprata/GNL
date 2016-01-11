@@ -5,144 +5,141 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/14 16:30:50 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/08 16:31:27 by tiprata          ###   ########.fr       */
+/*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
+/*   Updated: 2016/01/11 14:39:09 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	get_next_line(int const fd, char **line)
+char	*ft_dupstrcat(char *s1, char *s2, int l)
 {
-  static t_rest s;
-  char tmp[BUF_SIZE + 1];
-  int stop;
-  char *stock = NULL;
-  int i;
-  int j;
-  int count;
-  int endof;
+	int i;
+	int j;
+	char *str;
 
-  s.indic = 0;
-  endof = 0;
-  count = 0;
-  j = 0;
-  i = 0;
-  stop = 0;
-  if (fd < 0 || line == NULL || *line == NULL)
-	  return (-1);
-  if (s.indic == 1)
-  {
-	  *line = ft_strdup("");
-	  s.indic = 0;
-	  return (s.ret == 0 ? 0 : 1);
-  }
-  if (s.str != NULL)
-  {
-      stop = ft_strchr(s.str, '\n');
-      if (stop > 0)
-	  {
-		  if (!(*line = ft_strsub(s.str, 0, stop - 1)))
-			  return (-1);
-		  while (i != stop + 1)
-		  {
-			  s.str++;
-			  i++;
-		  }
-		  if (s.str[0] == '\n')
-			  s.indic = 1;
-		  if (*s.str == '\0')
-		  {
-			  free(s.tmp);
-			  s.str = NULL;
-			  s.tmp = NULL;
-		  }
-//		  ft_putstr("ENDOF NON FIN\n");
-		  return (1);
-	  }
-	  stop = 0;
-	  if (!(stock = ft_strdup(s.str)))
-		  return (-1);
-	  if (s.ret == 0)
-	  {
-		  *line = ft_strdup(stock);
-//		  ft_putstr("ENDOF FILE\n");
-		  return (0);
-	  }
-  }
-  else
-	  if (!(stock = ft_memalloc(BUF_SIZE + 1)))
-		  return (-1);
-  while ((s.ret = read(fd, tmp, BUF_SIZE)))
-  {
-	  tmp[s.ret] = '\0';
-	  if (tmp[0] == '\0' && s.ret == 0)
-	  {
-		  *line = ft_strdup("");
-		  return (0);
-	  }
-	  stop = ft_strchr(tmp, '\n');
-	  if (stop >= 0 && s.str == NULL)
-	  {
-		  if (tmp[stop + 1] == '\n')
-		  {
-			  s.indic = 1;
-		  }
-		  if (!(stock = ft_dupnstrcat(stock, tmp, stop - 1)))
-			  return (-1);
-		  if (!(s.str = ft_strsub(tmp, stop + 1, ft_strlen(tmp) - stop + 1)))
-			  return (-1);
-		  s.tmp = s.str;
-		  if (!(*line = ft_strdup(stock)))
-			  return (-1);
-//		  ft_putstr("ENDOF NON\n");
-		  return (1);
-	  }
-	  else
-	  {
-		  if (!(stock = ft_dupstrcat(stock, tmp)))
-			  return (-1);
-		  free(s.str);
-		  s.str = NULL;
-	  }
-  }
-  if (!(*line = ft_strdup(stock)))
-	  return (-1);
-  if (s.ret == 0)
-  {
-	  if (*line[0] == '\n')
-		  *line = ft_strdup("");
-	  return (0);
-  }
-  free(stock);
-  stock = NULL;
-  return (1);
+	i = -1;
+	j = -1;
+	if (s1 == NULL)
+		s1 = ft_strdup("");
+	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
+		return (NULL);
+		ft_bluestr("||");
+		ft_redstr(s1);
+		ft_bluestr("||");
+		ft_pinkstr(s2);
+		ft_bluestr("||");
+	while (s1[++i])
+		str[i] = s1[i];// == '\n' ? '\0' : s1[i];
+	while (s2[++j] && j < l)
+		str[i++] = s2[j];// == '\n' ? '\0' : s2[j];
+	str[i] = '\0';
+	free(s1);
+	s1 = NULL;
+	return (str);
 }
 
-/*int		main(int ac, char **av)
+int	get_next_line(int const fd, char **line)
 {
-	char **str;
-	int i = 0;;
-	int ret;
-	int count;
-	int fd;
+	static t_rest st;
+	int i = 0;
+	int j = 0;
+  char *str = NULL;
 
-
-	if (ac)
-		fd = open(av[1], O_RDONLY);		
-	count = 0;
-	str = (char **)ft_memalloc(sizeof(char *) * 5);
-	while (count != 1)
+	st.tmp = NULL;
+//  st.s = NULL;
+	if (fd < 0)
+		return (-1);
+  if (st.s)
+  {
+		ft_bluestr("OK OK OK \n");
+		str = ft_strchr(st.s, '\n');
+		if (str == NULL)
+		{
+			*line = ft_strdup(st.s);
+		}
+		else
+    {
+      i = str - st.s;
+      *line = ft_strsub(st.s, 0, i);
+			if (&str[1])
+      	st.s = ft_strdup(&str[1]);
+      return (st.ret == 0 && st.s[0] == '\0' ? 0 : 1);
+    }
+  }
+	while (j == 0)
 	{
-		ret = get_next_line(fd, &str[i]);
-		if (ret == 0)
-			count = 1;
-		ft_putstr(str[i]);
-		ft_putstr("||");
-		ft_putchar(str[i][0]);
-		ft_putstr("||");
-		i++;
-		ft_putnbr(i);
+		if (st.ret == 0)
+			j = 1;
+		if (!(st.tmp))
+			st.tmp = ft_memalloc(BUF_SIZE + 1);
+		st.ret = read(fd, st.tmp, BUF_SIZE);
+		if (st.ret == -1)
+			return (-1);
+		st.tmp[st.ret + 1] = '\0';
+  	str = ft_strchr(st.tmp, '\n');
+    if (str == NULL)
+    {
+      if (!(*line))
+			{
+				*line = ft_strdup(st.tmp);
+			}
+			else
+			{
+      	*line = ft_dupstrcat(*line, st.tmp, ft_strlen(st.tmp));
+			/*	ft_putchar('$');
+				ft_redstr(st.tmp);
+				ft_putchar('$');*/
+			}
+			ft_strdel(&st.tmp);
+    }
+    else
+      {
+        i = str - st.tmp;
+				ft_pinkchar('X');
+				ft_greenstr(str);
+				ft_pinkchar('X');
+        *line = ft_dupstrcat(*line, st.tmp, i);
+        st.s = ft_strdup(&str[1]);
+				ft_bluestr(st.s);
+				ft_strdel(&st.tmp);
+      }
 	}
-	return 0;
-	}*/
+	if (st.s != NULL)
+		ft_greenstr("DAMN\n");
+	return (st.ret == 0 ? 0 : 1);
+}
+
+int	main(int ac, char **av)
+{
+	int fd;
+	int ret;
+	char *line = NULL;
+	int i;
+int stop;
+
+stop = 0;
+	i = 0;
+	ret = 0;
+	if (ac > 1)
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
+			{
+				ft_putstr("ALERT FD -1\n");
+				return (0);
+			}
+		while (stop != 1)
+		{
+			ret = get_next_line(fd, &line);
+			ft_putstr(line);
+			ft_pinkchar('|');
+			ft_pinkchar('\n');
+			ft_strdel(&line);
+			if (ret == 0)
+				stop = 1;
+			i++;
+		}
+	}
+	return (0);
+}
