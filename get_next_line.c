@@ -6,12 +6,12 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/11 14:39:09 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/12 14:29:13 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+#include <stdio.h>
 char	*ft_dupstrcat(char *s1, char *s2, int l)
 {
 	int i;
@@ -24,11 +24,6 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 		s1 = ft_strdup("");
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
 		return (NULL);
-		ft_bluestr("||");
-		ft_redstr(s1);
-		ft_bluestr("||");
-		ft_pinkstr(s2);
-		ft_bluestr("||");
 	while (s1[++i])
 		str[i] = s1[i];// == '\n' ? '\0' : s1[i];
 	while (s2[++j] && j < l)
@@ -47,17 +42,14 @@ int	get_next_line(int const fd, char **line)
   char *str = NULL;
 
 	st.tmp = NULL;
-//  st.s = NULL;
+  //st.s = NULL;
 	if (fd < 0)
 		return (-1);
   if (st.s)
   {
-		ft_bluestr("OK OK OK \n");
 		str = ft_strchr(st.s, '\n');
 		if (str == NULL)
-		{
 			*line = ft_strdup(st.s);
-		}
 		else
     {
       i = str - st.s;
@@ -69,11 +61,11 @@ int	get_next_line(int const fd, char **line)
   }
 	while (j == 0)
 	{
-		if (st.ret == 0)
-			j = 1;
 		if (!(st.tmp))
 			st.tmp = ft_memalloc(BUF_SIZE + 1);
 		st.ret = read(fd, st.tmp, BUF_SIZE);
+		if (st.ret == 0)
+			j = 1;
 		if (st.ret == -1)
 			return (-1);
 		st.tmp[st.ret + 1] = '\0';
@@ -81,44 +73,94 @@ int	get_next_line(int const fd, char **line)
     if (str == NULL)
     {
       if (!(*line))
-			{
 				*line = ft_strdup(st.tmp);
-			}
 			else
-			{
       	*line = ft_dupstrcat(*line, st.tmp, ft_strlen(st.tmp));
-			/*	ft_putchar('$');
-				ft_redstr(st.tmp);
-				ft_putchar('$');*/
-			}
 			ft_strdel(&st.tmp);
     }
     else
       {
         i = str - st.tmp;
-				ft_pinkchar('X');
-				ft_greenstr(str);
-				ft_pinkchar('X');
         *line = ft_dupstrcat(*line, st.tmp, i);
         st.s = ft_strdup(&str[1]);
-				ft_bluestr(st.s);
 				ft_strdel(&st.tmp);
+				return (st.ret == 0 ? 0 : 1);
       }
 	}
-	if (st.s != NULL)
-		ft_greenstr("DAMN\n");
 	return (st.ret == 0 ? 0 : 1);
 }
 
+/*int		main(void)
+{
+	char 	*line;
+	int		out;
+	int		p[2];
+	int		fd;
+
+	fd = 1;
+	out = dup(fd);
+	pipe(p);
+	dup2(p[1], fd);
+	write(fd, "aaa\nbbb\nccc\nddd\n", 16);
+	dup2(out, fd);
+	close(p[1]);
+	get_next_line(p[0], &line);
+	if ((strcmp(line, "aaa")) == 0)
+	{
+		ft_greenstr(line);
+		ft_putchar('\n');
+//	ft_greenstr("FIRST LINE : OK|\n");
+	}
+	else
+		ft_redstr("False\n");
+	get_next_line(p[0], &line);
+	if ((strcmp(line, "bbb")) == 0)
+	{
+		ft_greenstr(line);
+		ft_putchar('\n');
+//	ft_greenstr("SECOND LINE : OK|\n");
+	}
+	else
+		ft_redstr("False\n");
+	ft_strdel(&line);
+	get_next_line(p[0], &line);
+	if ((strcmp(line, "ccc")) == 0)
+	{
+		ft_greenstr(line);
+		ft_putchar('\n');
+//		ft_bluestr("THIRD LINE : OK|\n");
+	}
+	else
+		ft_redstr("False\n");
+	get_next_line(p[0], &line);
+	if ((strcmp(line, "ddd")) == 0)
+	{
+		ft_greenstr(line);
+		ft_putchar('\n');
+	//	ft_bluestr("FOURTH LINE : OK|\n");
+	}
+else
+	ft_redstr("False");
+int x = get_next_line(p[0], &line);
+if ((strcmp(line, "")) == 0)
+	ft_bluestr("joooooo");
+	if (x == 0)
+	ft_greenstr("POOOOO");
+get_next_line(p[0], &line);
+ft_bluestr(line);
+
+	return (0);
+}
+*/
 int	main(int ac, char **av)
 {
 	int fd;
 	int ret;
 	char *line = NULL;
 	int i;
-int stop;
+	int stop;
 
-stop = 0;
+	stop = 0;
 	i = 0;
 	ret = 0;
 	if (ac > 1)
@@ -129,17 +171,18 @@ stop = 0;
 				ft_putstr("ALERT FD -1\n");
 				return (0);
 			}
-		while (stop != 1)
+		while ((ret = get_next_line(fd, &line)))
 		{
-			ret = get_next_line(fd, &line);
+//			if (ret == 0)
+//			stop = 1;
 			ft_putstr(line);
 			ft_pinkchar('|');
 			ft_pinkchar('\n');
 			ft_strdel(&line);
-			if (ret == 0)
-				stop = 1;
-			i++;
 		}
+		get_next_line(fd, &line);
+		ft_putstr(line);
+
 	}
 	return (0);
 }
