@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/12 17:48:02 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/12 18:08:20 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	get_next_line(int const fd, char **line)
 	int j = 0;
   char *str = NULL;
 
+  *line = NULL;
 	st.tmp = NULL;
   //st.s = NULL;
 	if (fd < 0)
@@ -92,7 +93,7 @@ int	get_next_line(int const fd, char **line)
 	}
 	return (st.ret == 0 ? 0 : 1);
 }
-
+/*
 int		main(int ac, char **av)
 {
 	int fd;
@@ -126,4 +127,4 @@ int		main(int ac, char **av)
 
 	}
 	return (0);
-}
+}*/
