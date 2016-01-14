@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/14 17:53:32 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/14 20:31:10 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 	*str = ft_strchr(*s, '\n');
 	if (*str == NULL)
 	{
+		ft_bluestr("Kabom");
 		*line = ft_strdup(*s);
+		ft_bluestr(*s);  // ICI ICI ICI
 		return (2);
 	}
 	else
@@ -74,7 +76,9 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 		*line = ft_strsub(*s, 0, i);
 		*s = ((&(*str[1])) != '\0') ? (ft_strdup(&(*str[1]))) : NULL;
 //		if (*s == NULL)
-		//ft_greenstr("VICTORY\n");
+		ft_redstr("==>");
+		ft_greenstr(&(*str[1])); // ICI ICI ICI
+		ft_redstr("<==");
 		return (ret == 0 && *s[0] == '\0' ? 0 : 1);
 	}
 }
@@ -120,7 +124,7 @@ int		get_next_line(int const fd, char **line)
 	*line = NULL;
 	if (st.s)
 	{
-//		ft_bluestr("Existence\n");
+		ft_bluestr("Existence\n");
 		if ((ft_static_exist(&st.s, line, &str, st.ret)) != 2)
 			return (st.ret == 0 && st.s[0] == '\0' ? ft_strd(&st.s, &str) : 1);
 	}
@@ -132,7 +136,7 @@ int		get_next_line(int const fd, char **line)
 //	ft_read(&st, &str, line, fd);
 	while (st.j == 0)
 	{
-		st.tmp = st.tmp == NULL ? ft_memalloc(BUF_SIZE + 1) : st.tmp;
+		st.tmp = (st.tmp == NULL ? ft_memalloc(BUF_SIZE + 1) : st.tmp);
 		if ((st.ret = read(fd, st.tmp, BUF_SIZE)) && st.ret == -1)
 			return (-1);
 		st.j = st.ret == 0 ? 1 : 0;
@@ -147,10 +151,11 @@ int		get_next_line(int const fd, char **line)
 		{
 			st.i = str - st.tmp;
 			*line = ft_dupstrcat(*line, st.tmp, st.i);
-			st.s = ft_strdup(&str[1]);
+			ft_greenstr(st.tmp);
+			st.s = (&str[1]) != '\0' ? ft_strdup(&str[1]) : NULL;
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
-			return (st.ret == 0 ? ft_strd(&st.s, &str) : 1);
+			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.s, &str) : 1);
 		}
 	}
 //	ft_putnbr(st.ret);
