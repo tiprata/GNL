@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/14 16:53:56 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/14 17:53:32 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,14 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 
 	i = 0;
 	j = 0;
-	if (s1 == NULL)
+	if (s1 == NULL || s1[0] == '\0')
 	{
 		if (!(str = ft_memalloc(l + 1)))
 			return (NULL);
+		ft_redstr(s2);
+		ft_pinkchar('{');
+		ft_putnbr(l + 1);
+		ft_pinkchar('}');
 		return ((str = ft_strncpy(str, s2, l)));
 	}
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
@@ -41,8 +45,6 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 		i++;
 	}
 	str[i] = '\0';
-	free(s1);
-	s1 = NULL;
 	return (str);
 }
 
@@ -70,7 +72,7 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 	{
 		i = *str - *s;
 		*line = ft_strsub(*s, 0, i);
-		*s = ((&(*str[1])) != '\0') ? (&(*str[1])) : NULL;
+		*s = ((&(*str[1])) != '\0') ? (ft_strdup(&(*str[1]))) : NULL;
 //		if (*s == NULL)
 		//ft_greenstr("VICTORY\n");
 		return (ret == 0 && *s[0] == '\0' ? 0 : 1);
@@ -155,7 +157,7 @@ int		get_next_line(int const fd, char **line)
 	return (st.ret == 0 ? ft_strd(&st.s, &str) : 1);
 }
 
-/*int   main(int ac, char **av)
+int   main(int ac, char **av)
 {
 	int fd;
 	int ret;
@@ -187,4 +189,4 @@ int		get_next_line(int const fd, char **line)
 		close(fd);
 	}
 	return (0);
-	}*/
+}
