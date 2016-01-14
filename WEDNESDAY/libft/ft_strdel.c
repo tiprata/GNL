@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 19:45:21 by tiprata           #+#    #+#             */
-/*   Updated: 2015/11/24 17:35:05 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/14 16:44:33 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	ft_strdel(char **as)
 {
-	ft_memdel((void **)as);
+	if (*as)
+		ft_memdel((void **)as);
 }
