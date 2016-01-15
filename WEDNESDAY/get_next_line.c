@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/15 16:27:19 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/15 17:04:46 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,9 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 	}
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
 		return (NULL);
-//	ft_pinkstr("X?888X?|");
-//	ft_putnbr(ft_strlen(s1));//ft_strlen(s1));// + l + 1);
-//	ft_pinkchar('|');
-//	ft_pinkchar('\n');
 	while (s1[i])
 	{
 		str[i] = s1[i];
-//		ft_pinkchar(s1[i]);
 		i++;
 	}
 	while (s2[j] && j < l)
@@ -52,7 +47,6 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 	str[i] = '\0';
 	if (i == (int)ft_strlen(s2))
 		ft_strdel(&s2);
-//	ft_redstr(str);
 	return (str);
 }
 
@@ -89,15 +83,9 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 			*s = ft_strdup(*str);
 		}
 		else
+		{
 			*s = NULL;
-//		*s = *str[1] != '\0' ? ft_strdup(&(*str[1])) : NULL;
-		//	ft_bluestr(str[1]);
-		//	ft_redstr(*s);
-//		if (*s == NULL)
-//		ft_redstr("==>");
-//		if (*str[1] != '\0')
-//			ft_greenstr(*s); // ICI ICI ICI
-//		ft_redstr("<==");
+		}
 		return (ret == 0 && *s[0] == '\0' ? 0 : 1);
 	}
 }
@@ -143,7 +131,7 @@ int		get_next_line(int const fd, char **line)
 	*line = NULL;
 	if (st.s)
 	{
-//		ft_bluestr("Existence\n");
+		//	ft_bluestr(st.s);
 		if ((ft_static_exist(&st.s, line, &str, st.ret)) != 2)
 			return (st.ret == 0 && st.s[0] == '\0' ? ft_strd(&st.s, &str) : 1);
 	}
@@ -160,27 +148,33 @@ int		get_next_line(int const fd, char **line)
 			return (-1);
 		st.j = st.ret == 0 ? 1 : 0;
 		st.tmp[st.ret] = '\0';
+		ft_redstr(st.tmp);
 		str = ft_strchr(st.tmp, '\n');
+
 		if (str == NULL)
 		{
+//			ft_putstr("str null");
 			*line = ft_dupstrcat(*line, st.tmp, ft_strlen(st.tmp));
-			ft_strdel(&st.tmp);
+//			ft_redstr(st.tmp);
+			//		ft_strdel(&st.tmp);
 		}
 		else
 		{
+			ft_putstr("else");
 			st.i = str - st.tmp;
-//			ft_putnbr(str - st.tmp);
-//			ft_putchar('|');
 			if (st.i == 0)
 			{
 //							ft_greenstr(*line);
 			}
-//			ft_bluestr(*line);
 			*line = ft_dupstrcat(*line, st.tmp, st.i);//this string failed
-//			ft_pinkstr(*line);
-//			ft_putnbr(st.i);
-///			ft_putchar('\n');
-			st.s = (str[1]) != '\0' ? ft_strdup(&str[1]) : NULL;
+			if (str[1] != '\0')
+			{
+				str = str + 1;
+				st.s = ft_strdup(str);
+			}
+			else
+				st.s = NULL;
+//			st.s = (str[1]) != '\0' ? ft_strdup(&str[1]) : NULL;
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
 			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.s, &str) : 1);
@@ -212,7 +206,7 @@ int   main(int ac, char **av)
 		while (stop != 1)
 	 	{
 			ret = get_next_line(fd, &line);
-			ft_putstr(line);
+//			ft_putstr(line);
 			ft_pinkchar('|');
 			ft_pinkchar('\n');
 			ft_strdel(&line);
