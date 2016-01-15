@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# define BUF_SIZE 10
+# define BUF_SIZE 8
 
 typedef struct	s_rest
 {
