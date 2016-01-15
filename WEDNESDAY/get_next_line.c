@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/15 17:04:46 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/15 19:58:02 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int		get_next_line(int const fd, char **line)
 			return (-1);
 		st.j = st.ret == 0 ? 1 : 0;
 		st.tmp[st.ret] = '\0';
-		ft_redstr(st.tmp);
+//		ft_redstr(st.tmp);
 		str = ft_strchr(st.tmp, '\n');
 
 		if (str == NULL)
@@ -160,21 +160,33 @@ int		get_next_line(int const fd, char **line)
 		}
 		else
 		{
-			ft_putstr("else");
+//			ft_bluestr("Dans le else =_?");
 			st.i = str - st.tmp;
-			if (st.i == 0)
-			{
-//							ft_greenstr(*line);
-			}
+//			ft_pinkstr("++");
+//			ft_greenstr(str);//st.tmp);
+//			ft_pinkstr("++");
+//			ft_putnbr(st.i);
 			*line = ft_dupstrcat(*line, st.tmp, st.i);//this string failed
 			if (str[1] != '\0')
 			{
+//				ft_bluestr("Avant increm=|");
+//				ft_redstr(str);
+//				ft_pinkstr("|XXXX|");
 				str = str + 1;
+				//			ft_greenstr("Apres increm=|");
+//				ft_redstr(str);
 				st.s = ft_strdup(str);
 			}
+//			if (st.s == NULL && st.sfree != NULL)
+//			{
+			//			ft_redstr("Freeance\n");
+//				ft_strdel(&st.sfree);
+			//		}
 			else
+			{
+				ft_strdel(&st.sfree);
 				st.s = NULL;
-//			st.s = (str[1]) != '\0' ? ft_strdup(&str[1]) : NULL;
+				}
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
 			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.s, &str) : 1);
@@ -184,7 +196,7 @@ int		get_next_line(int const fd, char **line)
 	return (st.ret == 0 ? ft_strd(&st.s, &str) : 1);
 }
 
-int   main(int ac, char **av)
+/*int   main(int ac, char **av)
 {
 	int fd;
 	int ret;
@@ -206,7 +218,7 @@ int   main(int ac, char **av)
 		while (stop != 1)
 	 	{
 			ret = get_next_line(fd, &line);
-//			ft_putstr(line);
+			ft_putstr(line);
 			ft_pinkchar('|');
 			ft_pinkchar('\n');
 			ft_strdel(&line);
@@ -218,4 +230,4 @@ int   main(int ac, char **av)
 		close(fd);
 	}
 	return (0);
-}
+	}*/
