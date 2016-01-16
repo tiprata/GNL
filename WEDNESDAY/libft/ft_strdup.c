@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 19:45:37 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/15 12:45:54 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/16 14:42:51 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 
 char	*ft_strdup(const char *s1)
 {
-	size_t	size;
 	char	*str;
 
-	size = ft_strlen(s1);
-	if (!(str = (char*)ft_memalloc(sizeof(char) * size + 1)))
+	if (!(str = ft_memalloc(sizeof(char) * (ft_strlen(s1) + 1))))
 		return (NULL);
+	ft_pinkstr((char *)s1);
 	str = ft_strcpy(str, s1);
+	ft_putstr(s1);
 	return (str);
 }
