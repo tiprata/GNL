@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 16:31:37 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/14 16:49:13 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/17 16:51:21 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# define BUF_SIZE 8
+# define BUF_SIZE 10
 
 typedef struct	s_rest
 {

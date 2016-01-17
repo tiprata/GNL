@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/15 19:58:02 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/17 18:29:54 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,7 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 	j = 0;
 	if (s1 == NULL || s1[0] == '\0')
 	{
-		if (!(str = ft_memalloc(l + 1)))
-			return (NULL);
-		str = ft_strncpy(str, s2, l);
-		//ft_bluestr("|----------");
-		//ft_putnbr(l);
-		//	ft_bluestr("----------|");
+		str = ft_strsub(s2, 0, l);
 		return (str);
 	}
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
@@ -45,8 +40,8 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 		i++;
 	}
 	str[i] = '\0';
-	if (i == (int)ft_strlen(s2))
-		ft_strdel(&s2);
+//	if (i == (int)ft_strlen(s2))
+//		ft_strdel(&s2);
 	return (str);
 }
 
@@ -67,14 +62,11 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 	*str = ft_strchr(*s, '\n');
 	if (*str == NULL)
 	{
-//		if (s)
 		*line = ft_strdup(*s);
-//		ft_bluestr(*s);  // ICI ICI ICI
 		return (2);
 	}
 	else
 	{
-//		ft_redstr(*s);
 		i = *str - *s;
 		*line = ft_strsub(*s, 0, i);
 		if (str[1] != '\0')
@@ -83,9 +75,7 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 			*s = ft_strdup(*str);
 		}
 		else
-		{
 			*s = NULL;
-		}
 		return (ret == 0 && *s[0] == '\0' ? 0 : 1);
 	}
 }
@@ -120,7 +110,8 @@ int		get_next_line(int const fd, char **line)
 {
 	static t_rest	st;
 	char			*str;
-	
+	int top;
+
 	str = NULL;
 	st.i = 0;
 	st.j = 0;
@@ -131,14 +122,14 @@ int		get_next_line(int const fd, char **line)
 	*line = NULL;
 	if (st.s)
 	{
-		//	ft_bluestr(st.s);
-		if ((ft_static_exist(&st.s, line, &str, st.ret)) != 2)
+		if ((top = ft_static_exist(&st.s, line, &str, st.ret)) != 2)
 			return (st.ret == 0 && st.s[0] == '\0' ? ft_strd(&st.s, &str) : 1);
-	}
-	if (st.s == NULL && st.sfree != NULL)
-	{
-		ft_redstr("Freeance\n");
-		ft_strdel(&st.sfree);
+		if (top == 2)
+		{
+//			if (st.sfree)
+//			ft_greenstr(st.sfree);
+//			ft_strdel(&st.sfree);
+		}
 	}
 //	ft_read(&st, &str, line, fd);
 	while (st.j == 0)
@@ -148,45 +139,29 @@ int		get_next_line(int const fd, char **line)
 			return (-1);
 		st.j = st.ret == 0 ? 1 : 0;
 		st.tmp[st.ret] = '\0';
-//		ft_redstr(st.tmp);
 		str = ft_strchr(st.tmp, '\n');
-
 		if (str == NULL)
 		{
-//			ft_putstr("str null");
 			*line = ft_dupstrcat(*line, st.tmp, ft_strlen(st.tmp));
-//			ft_redstr(st.tmp);
-			//		ft_strdel(&st.tmp);
+			ft_strdel(&st.tmp);
 		}
 		else
 		{
-//			ft_bluestr("Dans le else =_?");
 			st.i = str - st.tmp;
-//			ft_pinkstr("++");
-//			ft_greenstr(str);//st.tmp);
-//			ft_pinkstr("++");
-//			ft_putnbr(st.i);
-			*line = ft_dupstrcat(*line, st.tmp, st.i);//this string failed
-			if (str[1] != '\0')
+			*line = ft_dupstrcat(*line, st.tmp, st.i);
+			if (st.s)
 			{
-//				ft_bluestr("Avant increm=|");
-//				ft_redstr(str);
-//				ft_pinkstr("|XXXX|");
-				str = str + 1;
-				//			ft_greenstr("Apres increm=|");
-//				ft_redstr(str);
-				st.s = ft_strdup(str);
-			}
-//			if (st.s == NULL && st.sfree != NULL)
-//			{
-			//			ft_redstr("Freeance\n");
-//				ft_strdel(&st.sfree);
-			//		}
-			else
-			{
+//				ft_redstr(st.s);
 				ft_strdel(&st.sfree);
 				st.s = NULL;
-				}
+			}
+			if (str[1] != '\0')
+				st.s = ft_strdup(&(str[1]));
+			else
+			{
+//				ft_strdel(&st.sfree);
+//				st.s = NULL;
+			}
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
 			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.s, &str) : 1);
@@ -209,25 +184,23 @@ int		get_next_line(int const fd, char **line)
 	ret = 0;
 	if (ac > 1)
 	{
+		while (1)
+		{
 		fd = open(av[1], O_RDONLY);
 		if (fd == -1)
 		{
 			ft_putstr("ALERT FD -1\n");
 			return (0);
 		}
-		while (stop != 1)
-	 	{
-			ret = get_next_line(fd, &line);
-			ft_putstr(line);
-			ft_pinkchar('|');
-			ft_pinkchar('\n');
+		while ((ret = get_next_line(fd, &line)) == 1)
+	 	{			
+			//		ft_putstr(line);
+			//	ft_pinkchar('|');
+			//	ft_pinkchar('\n');
 			ft_strdel(&line);
-//			line = NULL;
-			if (ret == 0)
-				stop = 1;
-			i++;
 		}
 		close(fd);
+		}
 	}
 	return (0);
 	}*/
