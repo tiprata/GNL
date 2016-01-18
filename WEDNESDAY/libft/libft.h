@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:46:23 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/11 15:32:36 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/17 14:33:14 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char				*ft_strrchr(const char *s, int c);
 int					ft_isdigit(int c);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				ft_putstr(char const *s);
-char				*ft_strdup(const char *s1);
+char				*ft_strdup(char *s1);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_strxdup(char const *s, size_t x, size_t y);
 size_t				ft_line_count(char const *s, char c);
