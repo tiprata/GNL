@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/18 17:22:30 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/18 18:31:02 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 	int		j;
 	char	*str;
 
+	str = NULL;
 	i = 0;
 	j = 0;
 	if (s1 == NULL || s1[0] == '\0')
 	{
-		ft_strdel(&s1);
+		if (s1 != NULL)
+			ft_strdel(&s1);
 		return (ft_strsub(s2, 0, l));
 	}
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
@@ -44,8 +46,6 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 	}
 	str[i] = '\0';
 	ft_strdel(&s1);
-//	if (i == (int)ft_strlen(s2))
-//		ft_strdel(&s2);
 	return (str);
 }
 
@@ -123,8 +123,8 @@ int		get_next_line(int const fd, char **line)
 			*line = ft_dupstrcat(*line, st.tmp, st.i);
 			if (st.s)
 			{
-				ft_strdel(&st.sfree);
 				st.s = NULL;
+				ft_strdel(&st.sfree);
 			}
 			if (str[1] != '\0')
 			{
@@ -132,21 +132,18 @@ int		get_next_line(int const fd, char **line)
 			}
 			else
 			{
-				ft_strdel(&st.sfree);
 				st.s = NULL;
+				ft_strdel(&st.sfree);
 			}
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
 			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.s, &str) : 1);
 		}
 	}
-//	ft_putnbr(st.ret);
-//	if (st.ret == 0)
-//		ft_strdel(&st.sfree);
 	return (st.ret == 0 ? ft_strd(&st.sfree, &str) : 1);
 }
 
-int   main(int ac, char **av)
+/*int   main(int ac, char **av)
 {
 	int fd;
 	int ret;
@@ -178,7 +175,7 @@ int   main(int ac, char **av)
 			//	}
 	}
 	return (0);
-	}
+	}*/
 
  /*int		ft_read(t_rest *st, char **str, char **line, int const fd)
 {
