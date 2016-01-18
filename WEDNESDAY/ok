@@ -1,0 +1,1 @@
+alias 1='qq -g -o GET___NEXT___LINE get_next_line.c libft/*.c'

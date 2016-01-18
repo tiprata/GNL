@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/18 18:31:02 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/18 21:10:38 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		ft_strd(char **s, char **str)
 	return (0);
 }
 
-int		ft_static_exist(char **s, char **line, char **str, int ret)
+int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 {
 	int i;
 
@@ -78,8 +78,9 @@ int		ft_static_exist(char **s, char **line, char **str, int ret)
 		if (str[1] != '\0')
 		{
 			*str = *str + 1;
+			*s = NULL;
+			ft_strdel(sfree);
 			*s = ft_strdup(*str);
-//			ft_strdel(str);
 		}
 		else
 			*s = NULL;
@@ -101,7 +102,7 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	*line = NULL;
 	if (st.s)
-		if ((ft_static_exist(&st.s, line, &str, st.ret)) != 2)
+		if ((ft_static_exist(&st.s, line, &str, st.ret, &st.sfree)) != 2)
 			return (st.ret == 0 && st.s[0] == '\0' ? ft_strd(&st.s, &str) : 1);
 //	ft_read(&st, &str, line, fd);
 	while (st.j == 0)
@@ -143,7 +144,7 @@ int		get_next_line(int const fd, char **line)
 	return (st.ret == 0 ? ft_strd(&st.sfree, &str) : 1);
 }
 
-/*int   main(int ac, char **av)
+int   main(int ac, char **av)
 {
 	int fd;
 	int ret;
@@ -175,7 +176,7 @@ int		get_next_line(int const fd, char **line)
 			//	}
 	}
 	return (0);
-	}*/
+	}
 
  /*int		ft_read(t_rest *st, char **str, char **line, int const fd)
 {
