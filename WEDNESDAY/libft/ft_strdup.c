@@ -19,18 +19,7 @@ char	*ft_strdup(char *s1)
 	char	*str;
 
 	str = NULL;
-//	ft_redstr(s1);
-//	ft_putnbr(ft_strlen(s1));
-	if (!(str = ft_memalloc(sizeof(char) * ft_strlen(s1) + 1)))
-		return (NULL);
-//	str = ft_memalloc(1);
-//	str[0] = '\0';
 	if (!(str = ft_strjoin(str, s1)))
 		return (NULL);
-
-//	str = ft_strcpy(str, s1);
-//	ft_redstr(s1);
-//	str = ft_strsub(s1, 0, ft_strlen(s1));
-//	ft_redstr(str);
 	return (str);
 }
