@@ -22,11 +22,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	k;
 
 	k = 0;
-	j = ft_strlen(s1) + ft_strlen(s2);
-	if (!(str = (char *)malloc(sizeof(char) * (j + 1))))
+	j = s1 == NULL ? ft_strlen(s2) : ft_strlen(s1) + ft_strlen(s2);
+	if (!(str = (char *)ft_memalloc(sizeof(char) * (j + 1))))
 		return (NULL);
-	i = -1;
-	while (++i < ft_strlen(s1))
+	i = s1 == NULL ? 0 : -1;
+	while (s1 && ++i < ft_strlen(s1))
 		str[i] = s1[i];
 	while (i < j && s2[k])
 		str[i++] = s2[k++];
