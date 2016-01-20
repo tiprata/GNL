@@ -129,7 +129,7 @@ int		get_next_line(int const fd, char **line)
 			}
 			if (str[1] != '\0')
 			{
-				st.s = ft_strdup(&(str[1]));
+			  st.s = ft_strdup(&(str[1]));
 			}
 			else
 			{
@@ -144,7 +144,7 @@ int		get_next_line(int const fd, char **line)
 	return (st.ret == 0 ? ft_strd(&st.sfree, &str) : 1);
 }
 
-int   main(int ac, char **av)
+/*int   main(int ac, char **av)
 {
 	int fd;
 	int ret;
@@ -157,8 +157,8 @@ int   main(int ac, char **av)
 	ret = 0;
 	if (ac > 1)
 	{
-//		while (1)
-//		{
+	  //		while (1)
+	  //{
 			fd = open(av[1], O_RDONLY);
 			if (fd == -1)
 		{
@@ -167,16 +167,16 @@ int   main(int ac, char **av)
 		}
 			while ((ret = get_next_line(fd, &line)) == 1)
 			{			
-//				ft_putstr(line);
-//				ft_pinkchar('|');
-//				ft_pinkchar('\n');
-				ft_strdel(&line);
+			  ft_putstr(line);
+			  ft_pinkchar('|');
+			  ft_pinkchar('\n');
+			  ft_strdel(&line);
 			}
 			close(fd);
-			//	}
-	}
+				}
+	//}
 	return (0);
-	}
+	}*/
 
  /*int		ft_read(t_rest *st, char **str, char **line, int const fd)
 {
