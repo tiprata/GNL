@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/21 20:33:46 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/22 13:03:52 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 	if (*str == NULL)
 	{
 		*line = ft_strdup(*s);
-		ft_strd(s, sfree);
-//		ft_strdel(sfree);
+//		ft_strd(s, sfree);
+		ft_strdel(sfree);
 		return (2);
 	}
 	else
@@ -77,8 +77,9 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 		if (str[1] != '\0')
 		{
 			*str = *str + 1;
-//			ft_strdel(sfree);
+			ft_strdel(sfree);
 			*s = ft_strdup(*str);
+			*sfree = *s;
 		}
 		else
 		{
