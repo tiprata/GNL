@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/22 15:39:18 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/22 17:26:11 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 
 int		get_next_line(int const fd, char **line)
 {
-	static t_rest	st = {.sfree = NULL, .s = NULL, .tmp = NULL};
+	static t_rest	st = {.sfree = NULL, .s = NULL, .tmp = NULL, .ret = 0};
 	char			*str;
 
 	str = NULL;
@@ -89,16 +89,20 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	*line = NULL;
 	if (st.s)
+	{
 		if ((ft_static_exist(&st.s, line, &str, st.ret, &st.sfree)) != 2)
-			return (st.ret == 0 && st.s[0] == '\0' ? 0 : 1);
+			return (1);
+//			return (st.ret == 0 && st.s[0] == '\0' && *line == NULL ? 0 : 1);
+	}
 //	ft_read(&st, &str, line, fd);
 	while (st.j == 0)
+//	while ((st.ret = read(fd, st.tmp, BUF_SIZE)))
 	{
 		st.tmp = (st.tmp == NULL ? ft_memalloc(BUF_SIZE + 1) : st.tmp);
 		if ((st.ret = read(fd, st.tmp, BUF_SIZE)) && st.ret == -1)
 			return (-1);
-		st.j = st.ret == 0 ? 1 : 0;
 		st.tmp[st.ret] = '\0';
+		st.j = st.ret == 0 ? 1 : 0;
 		str = ft_strchr(st.tmp, '\n');
 		if (str == NULL)
 		{
@@ -117,7 +121,7 @@ int		get_next_line(int const fd, char **line)
 				ft_strdel(&st.sfree);
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
-			return (st.ret == 0 ? 0 : 1);
+			return (1);
 		}
 	}
 	if (st.ret == 0)
@@ -138,8 +142,8 @@ int   main(int ac, char **av)
 	ret = 0;
 	if (ac > 1)
 	{
-		while (1)
-		{
+//		while (1)
+//		{
 			fd = open(av[1], O_RDONLY);
 			if (fd == -1)
 		{
@@ -147,14 +151,18 @@ int   main(int ac, char **av)
 			return (0);
 		}
 			while ((ret = get_next_line(fd, &line)) == 1)
-			{			
-//			  ft_putstr(line);
-//			  ft_pinkchar('|');
-//			  ft_pinkchar('\n');
+			{
+			  ft_putstr(line);
+			  ft_pinkchar('|');
+			  ft_pinkchar('\n');
 			  ft_strdel(&line);
+			  ft_putnbr(ret);
+			  ft_putnbr('\n');
 			}
+			ret = get_next_line(fd, &line);
+			ft_putnbr(ret);
 			close(fd);
-				}
+//				}
 	}
 	return (0);
 	}
