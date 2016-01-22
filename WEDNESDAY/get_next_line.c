@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/22 13:03:52 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/22 15:10:02 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 	{
 		*line = ft_strdup(*s);
 //		ft_strd(s, sfree);
+		*s = NULL;
 		ft_strdel(sfree);
 		return (2);
 	}
@@ -76,10 +77,13 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 		*line = ft_strsub(*s, 0, i);
 		if (str[1] != '\0')
 		{
+//			str++;
 			*str = *str + 1;
-			ft_strdel(sfree);
-			*s = ft_strdup(*str);
-			*sfree = *s;
+//			*s = NULL;
+//			ft_strdel(sfree);
+//			ft_strd(sfree, str);
+			*s = *str;
+//			*sfree = *s;
 		}
 		else
 		{
@@ -91,13 +95,12 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 
 int		get_next_line(int const fd, char **line)
 {
-	static t_rest	st = {.sfree = NULL, .s = NULL};
+	static t_rest	st = {.sfree = NULL, .s = NULL, .tmp = NULL};
 	char			*str;
 
 	str = NULL;
 	st.i = 0;
 	st.j = 0;
-	st.tmp = NULL;
 //	st.sfree = NULL;
 	if (fd < 0 || line == NULL)
 		return (-1);
@@ -172,7 +175,7 @@ int   main(int ac, char **av)
 			  ft_strdel(&line);
 			}
 			close(fd);
-				}
-//	}
+//				}
+	}
 	return (0);
 	}
