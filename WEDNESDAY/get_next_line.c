@@ -6,7 +6,7 @@
 /*   By: tiprata <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/10 19:40:34 by tiprata           #+#    #+#             */
-/*   Updated: 2016/01/22 15:10:02 by tiprata          ###   ########.fr       */
+/*   Updated: 2016/01/22 15:39:18 by tiprata          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,14 @@ char	*ft_dupstrcat(char *s1, char *s2, int l)
 		return (ft_strsub(s2, 0, l));
 	}
 	if (!(str = ft_memalloc(ft_strlen(s1) + l + 1)))
-	{
 		return (NULL);
-	}
 	while (s1[i])
 	{
 		str[i] = s1[i];
 		i++;
 	}
 	while (s2[j] && j < l)
-	{
-		str[i] = s2[j];
-		j++;
-		i++;
-	}
+		str[i++] = s2[j++];
 	str[i] = '\0';
 	ft_strdel(&s1);
 	return (str);
@@ -66,7 +60,6 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 	if (*str == NULL)
 	{
 		*line = ft_strdup(*s);
-//		ft_strd(s, sfree);
 		*s = NULL;
 		ft_strdel(sfree);
 		return (2);
@@ -77,17 +70,8 @@ int		ft_static_exist(char **s, char **line, char **str, int ret, char **sfree)
 		*line = ft_strsub(*s, 0, i);
 		if (str[1] != '\0')
 		{
-//			str++;
 			*str = *str + 1;
-//			*s = NULL;
-//			ft_strdel(sfree);
-//			ft_strd(sfree, str);
 			*s = *str;
-//			*sfree = *s;
-		}
-		else
-		{
-//			ft_strdel(sfree);
 		}
 		return (ret == 0 && *s[0] == '\0' ? 0 : 1);
 	}
@@ -101,17 +85,12 @@ int		get_next_line(int const fd, char **line)
 	str = NULL;
 	st.i = 0;
 	st.j = 0;
-//	st.sfree = NULL;
 	if (fd < 0 || line == NULL)
 		return (-1);
 	*line = NULL;
 	if (st.s)
 		if ((ft_static_exist(&st.s, line, &str, st.ret, &st.sfree)) != 2)
-		{
-			if (st.ret == 0)
-				ft_strdel(&st.sfree);
-			return (st.ret == 0 && st.s[0] == '\0' ? 0 : 1);//ft_strd(&st.sfree, &str) : 1);
-		}
+			return (st.ret == 0 && st.s[0] == '\0' ? 0 : 1);
 //	ft_read(&st, &str, line, fd);
 	while (st.j == 0)
 	{
@@ -138,7 +117,7 @@ int		get_next_line(int const fd, char **line)
 				ft_strdel(&st.sfree);
 			st.sfree = st.s;
 			ft_strdel(&st.tmp);
-			return (st.ret == 0 ? 0 : 1);//ft_strd(&st.sfree, &str) : 1);
+			return (st.ret == 0 ? 0 : 1);
 		}
 	}
 	if (st.ret == 0)
@@ -159,8 +138,8 @@ int   main(int ac, char **av)
 	ret = 0;
 	if (ac > 1)
 	{
-//		while (1)
-//		{
+		while (1)
+		{
 			fd = open(av[1], O_RDONLY);
 			if (fd == -1)
 		{
@@ -169,13 +148,13 @@ int   main(int ac, char **av)
 		}
 			while ((ret = get_next_line(fd, &line)) == 1)
 			{			
-			  ft_putstr(line);
-			  ft_pinkchar('|');
-			  ft_pinkchar('\n');
+//			  ft_putstr(line);
+//			  ft_pinkchar('|');
+//			  ft_pinkchar('\n');
 			  ft_strdel(&line);
 			}
 			close(fd);
-//				}
+				}
 	}
 	return (0);
 	}
